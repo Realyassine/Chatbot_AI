@@ -55,10 +55,9 @@ Chatbot_AI/
 
    ```bash
    npm install
+   ```
 
-
-
-3. **Run the project: **
+3. **Run the project:**
    **Backend:**
       ```bash
       uvicorn app:app --reload
@@ -68,7 +67,6 @@ Chatbot_AI/
       npm run dev
       ```
       
-
 4. **Open in browser:**
 
    Navigate to `http://localhost:5173` to view the application.
