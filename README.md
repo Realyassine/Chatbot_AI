@@ -1,7 +1,3 @@
-Here's a professional and informative `README.md` for your [Chatbot\_AI](https://github.com/Realyassine/Chatbot_AI) project:
-
----
-
 # Chatbot\_AI
 
 **Final Chatbot AI Project** — A conversational AI chatbot built with React, Vite, and Tailwind CSS.
