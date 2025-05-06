@@ -1,6 +1,6 @@
 # Chatbot AI
 
-**Chatbot AI Project** — A conversational AI chatbot built with Python, React+Vite, and Tailwind CSS.
+**Chatbot AI Project** — A conversational AI chatbot using python Fastapi and Groq API
 
 ## 🧠 Overview
 
@@ -38,7 +38,8 @@ Chatbot_AI/
 ### Prerequisites
 
 * Node.js (v16 or higher)
-* npm 
+* npm
+* API Key: `https://console.groq.com/keys`
 
 ### Installation
 
