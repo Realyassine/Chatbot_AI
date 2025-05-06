@@ -1,27 +1,30 @@
-# Chatbot\_AI
+# Chatbot AI
 
-**Final Chatbot AI Project** — A conversational AI chatbot built with React, Vite, and Tailwind CSS.
+**Chatbot AI Project** — A conversational AI chatbot built with Python, React+Vite, and Tailwind CSS.
 
 ## 🧠 Overview
 
 This project is a lightweight, responsive chatbot interface designed for seamless user interaction. It leverages modern frontend technologies to provide a fast and intuitive experience.
 
 ## 🚀 Features
-
+* **Python**: Lightweight backend to handle requests and securely forward them to the AI service.
 * **React + Vite**: Utilizes Vite for rapid development and hot module replacement.
 * **Tailwind CSS**: Employs utility-first CSS for efficient styling.
-* **ESLint Integration**: Ensures code quality and consistency.
-* **Responsive Design**: Optimized for various screen sizes.
+
 
 ## 📁 Project Structure
 
 ```
 Chatbot_AI/
-├── public/
-├── src/
-│   ├── components/
-│   ├── App.jsx
-│   └── main.jsx
+├── backend/
+│  └── .env
+│  └── app.py
+│  └── requirment.txt
+├── frontend/
+│  └── public/
+│  └── src/
+│     └── App.jsx
+│     └── main.jsx
 ├── index.html
 ├── package.json
 ├── tailwind.config.js
@@ -35,7 +38,7 @@ Chatbot_AI/
 ### Prerequisites
 
 * Node.js (v16 or higher)
-* npm or yarn
+* npm 
 
 ### Installation
 
@@ -52,21 +55,19 @@ Chatbot_AI/
 
    ```bash
    npm install
-   # or
-   yarn install
-   ```
 
 
 
-3. **Start the development server:**
-
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   ```
-
-
+3. **Run the project: **
+   **Backend:**
+      ```bash
+      uvicorn app:app --reload
+      ```
+   **Frontend**
+      ```bash
+      npm run dev
+      ```
+      
 
 4. **Open in browser:**
 
@@ -78,11 +79,3 @@ To create an optimized production build:
 
 ```bash
 npm run build
-# or
-yarn build
-```
-
-
-
-The output will be in the `dist/` directory.([GitHub][1])
-
