@@ -57,7 +57,7 @@ Chatbot_AI/
    npm install
    ```
 
-3. **Run the project:**
+3. **Run the project:** <ln>
    **Backend:**
       ```bash
       uvicorn app:app --reload
