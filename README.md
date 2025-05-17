@@ -10,6 +10,8 @@ This project is a lightweight, responsive chatbot interface designed for seamles
 * **Python**: Lightweight backend to handle requests and securely forward them to the AI service.
 * **React + Vite**: Utilizes Vite for rapid development and hot module replacement.
 * **Tailwind CSS**: Employs utility-first CSS for efficient styling.
+* **Text-to-Speech**: Convert chatbot responses to audio using Google's TTS.
+* **Speech-to-Text**: Upload audio files or use microphone for voice commands and queries.
 
 
 ## 📁 Project Structure
@@ -78,3 +80,14 @@ To create an optimized production build:
 
 ```bash
 npm run build
+```
+
+## 🔌 API Endpoints
+
+The backend provides the following endpoints:
+
+* `POST /chat/`: Send messages to the AI chatbot
+* `POST /synthesize/`: Convert text to speech
+* `POST /transcribe/`: Convert uploaded audio to text
+* `GET /listen-mic/`: Convert speech from microphone to text
+````

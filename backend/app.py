@@ -1,7 +1,7 @@
 import os
 from typing import List, Dict
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, UploadFile, File
 from pydantic import BaseModel
 from groq import Groq
 from fastapi.middleware.cors import CORSMiddleware
@@ -10,7 +10,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 import io
 import gtts 
-
+import speech_recognition as sr
+from tempfile import NamedTemporaryFile
 
 load_dotenv()
 
@@ -142,3 +143,61 @@ async def synthesize_speech(data: dict):
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Speech synthesis error: {str(e)}")
+
+@app.post("/transcribe/")
+async def transcribe_audio(audio_file: UploadFile = File(...)):
+    """Convert speech to text using SpeechRecognition"""
+    try:
+        # Create a temporary file to store the uploaded audio
+        with NamedTemporaryFile(delete=True, suffix='.wav') as temp_audio:
+            # Write the uploaded file content to the temporary file
+            content = await audio_file.read()
+            temp_audio.write(content)
+            temp_audio.flush()
+            
+            # Initialize the recognizer
+            recognizer = sr.Recognizer()
+            
+            # Load the audio file
+            with sr.AudioFile(temp_audio.name) as source:
+                # Record the audio data from the file
+                audio_data = recognizer.record(source)
+                
+                # Use Google's speech recognition to convert speech to text
+                text = recognizer.recognize_google(audio_data)
+                
+                return {"text": text}
+    
+    except sr.UnknownValueError:
+        raise HTTPException(status_code=400, detail="Speech could not be understood")
+    except sr.RequestError as e:
+        raise HTTPException(status_code=500, detail=f"Could not request results from Google Speech Recognition service: {str(e)}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Speech recognition error: {str(e)}")
+
+@app.get("/listen-mic/")
+async def listen_microphone():
+    """Listen to the microphone and convert speech to text"""
+    try:
+        recognizer = sr.Recognizer()
+        
+        # Use the default microphone as the audio source
+        with sr.Microphone() as source:
+            # Adjust for ambient noise
+            recognizer.adjust_for_ambient_noise(source)
+            print("Listening to microphone...")
+            
+            # Listen for the first phrase and extract it into audio data
+            audio_data = recognizer.listen(source)
+            print("Processing speech...")
+            
+            # Recognize speech using Google Speech Recognition
+            text = recognizer.recognize_google(audio_data)
+            return {"text": text}
+    
+    except sr.UnknownValueError:
+        raise HTTPException(status_code=400, detail="Speech could not be understood")
+    except sr.RequestError as e:
+        raise HTTPException(status_code=500, detail=f"Could not request results from Google Speech Recognition service: {str(e)}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Speech recognition error: {str(e)}")
