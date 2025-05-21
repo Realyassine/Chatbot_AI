@@ -1,0 +1,234 @@
+# Chatbot AI Project Documentation
+
+## Project Overview
+This project is a full-stack AI-powered chatbot application built with modern web technologies. It allows users to have interactive conversations with an AI assistant powered by Groq's large language models.
+
+## Architecture
+
+### Backend (FastAPI + SQLAlchemy)
+- **Python FastAPI framework**: Provides a modern, fast API with automatic interactive documentation
+- **SQLAlchemy ORM**: Handles database operations with support for both SQLite and MySQL
+- **JWT Authentication**: Secure user authentication with token-based sessions
+- **Groq API Integration**: Connects to Groq's AI services for generating intelligent responses
+
+### Frontend (React + Vite)
+- **React**: Component-based UI library for building the interface
+- **Vite**: Modern, fast build tool and development server
+- **React Router**: Handles application routing and protected routes
+- **Tailwind CSS**: Utility-first CSS framework for styling
+- **Context API**: Manages global state for authentication and conversations
+
+## Key Features
+
+1. **User Authentication**:
+   - Registration and login functionality
+   - JWT token-based session management
+   - Protected routes based on authentication state
+
+2. **Conversation Management**:
+   - Create new conversations
+   - View conversation history
+   - Select and switch between conversations
+
+3. **AI Chat Interface**:
+   - Real-time messaging with AI
+   - Message history within conversations
+   - Text input with send functionality
+
+4. **Responsive Design**:
+   - Works across different device sizes
+   - Sidebar for conversation navigation
+   - Main chat area for interactions
+
+## Data Flow
+
+1. User authenticates through the login form
+2. Authentication token is stored and used for subsequent API calls
+3. User can create or select conversations from the sidebar
+4. Messages are sent to the backend, which forwards them to Groq API
+5. AI responses are received and displayed in the chat interface
+6. Conversations and messages are stored in the database for persistence
+
+## Project Structure
+
+```
+chatbot-ai/
+├── backend/
+│   ├── app.py            # Main FastAPI application
+│   ├── auth.py           # Authentication logic
+│   ├── database.py       # Database models and connection
+│   ├── conversation_utils.py  # Conversation handling utilities
+│   ├── .env              # Environment variables
+│   └── create_test_user.py    # Utility to create test users
+│
+├── frontend/chatbotUI/
+│   ├── src/
+│   │   ├── components/   # React components
+│   │   ├── contexts/     # Context providers
+│   │   ├── App.jsx       # Main application component
+│   │   └── main.jsx      # Application entry point
+│   ├── package.json      # Frontend dependencies
+│   └── index.html        # HTML entry point
+│
+└── README.md             # Project documentation
+```
+
+## Setup and Installation
+
+### Prerequisites
+- Python 3.10 or later
+- Node.js and npm
+- MySQL (optional, SQLite is supported by default)
+- A valid Groq API key
+
+### Backend Setup
+1. Navigate to the backend directory:
+   ```
+   cd backend
+   ```
+
+2. Create and activate a virtual environment:
+   ```
+   python -m venv env
+   env\Scripts\activate  # Windows
+   source env/bin/activate  # Linux/Mac
+   ```
+
+3. Install dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
+
+4. Configure the environment:
+   - Create a `.env` file with the following:
+     ```
+     # Database configuration
+     DATABASE_URL = sqlite:///./chatbot.db  # or MySQL connection string
+     
+     # Authentication settings
+     SECRET_KEY = your_secret_key_here
+     ALGORITHM = HS256
+     ACCESS_TOKEN_EXPIRE_MINUTES = 30
+     
+     # API keys
+     GROQ_API_KEY = your_groq_api_key
+     ```
+
+5. Create a test user:
+   ```
+   python create_test_user.py
+   ```
+
+6. Start the backend:
+   ```
+   uvicorn app:app --reload
+   ```
+
+### Frontend Setup
+1. Navigate to the frontend directory:
+   ```
+   cd frontend/chatbotUI
+   ```
+
+2. Install dependencies:
+   ```
+   npm install
+   ```
+
+3. Start the development server:
+   ```
+   npm run dev
+   ```
+
+4. Access the application at http://localhost:5173 (or the port shown in your terminal)
+
+## Usage
+1. Login with your credentials (or use the test user: testuser/testpass)
+2. Create a new conversation or select an existing one
+3. Type your message and press Enter or click Send
+4. View the AI's response and continue the conversation
+
+## Troubleshooting
+- If you encounter CORS issues, ensure both backend and frontend are running
+- For authentication errors, verify that the user exists in the database
+- If the AI doesn't respond, check your Groq API key is valid
+
+## Troubleshooting Guide
+
+### 401 Unauthorized Errors
+If you encounter 401 Unauthorized errors when making requests to the backend API:
+
+1. **Check Authentication Token**:
+   - Ensure your login is working properly
+   - Check that the token is being correctly stored in localStorage
+   - Verify the token is being sent in the Authorization header
+
+2. **CORS Configuration**:
+   - The backend must have proper CORS settings that allow credentials
+   - Frontend requests must include `credentials: 'include'` or equivalent
+
+3. **Token Expiration**:
+   - If your token has expired, you will need to re-login
+   - The current token expiration is set to 7 days
+
+### Database Connection Issues
+If you encounter database-related errors:
+
+1. **MySQL Configuration**:
+   - Make sure MySQL server is running if using MySQL
+   - Verify the credentials in the .env file are correct
+   - Try using SQLite (default fallback) if MySQL is problematic
+
+2. **Database Initialization**:
+   - Run `python setup_mysql_db.py` to initialize the MySQL database
+   - Database tables should be created automatically on application startup
+
+### Groq API Issues
+If the AI responses are not working:
+
+1. **API Key Validity**:
+   - Ensure your Groq API key in the .env file is valid and not expired
+   - The application will use mock responses if the key is invalid
+
+2. **API Rate Limits**:
+   - Check if you've exceeded Groq API rate limits
+   - The application will show appropriate error messages
+
+### Startup Procedure
+1. Start the backend server first:
+   ```
+   cd backend
+   python app.py
+   ```
+
+2. Start the frontend development server:
+   ```
+   cd frontend/chatbotUI
+   npm run dev
+   ```
+
+3. Alternatively, use the provided start script:
+   ```
+   start_all.bat
+   ```
+
+## Recent Fixes
+
+1. **Fixed 401 Authentication Issues**:
+   - Updated CORS configuration to properly handle credentials
+   - Improved error handling in authentication flow
+   - Added proper token validation and expiration checks
+
+2. **Database Connection**:
+   - Added fallback to SQLite when MySQL is unavailable
+   - Improved error handling for database operations
+
+3. **Groq API Integration**:
+   - Added better error handling for API key validation
+   - Implemented mock responses when API key is invalid
+   - Fixed streaming response handling
+
+4. **Frontend Improvements**:
+   - Added global error handling for API requests
+   - Improved state management in chat interface
+   - Fixed issues with message display and sending

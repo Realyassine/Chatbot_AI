@@ -225,33 +225,54 @@ The build artifacts will be stored in the `dist/` folder, ready to be deployed.
    - This issue has been fixed by proper error handling
    - If still occurring, check the browser console for details
 
-## 🔌 API Endpoints
+### Authentication Issues (401 Errors)
 
-The backend provides the following endpoints:
+If you're experiencing 401 Unauthorized errors:
 
-### Chat Endpoints
+1. **Check your login**: Make sure you can successfully log in and see the token in localStorage.
+2. **CORS settings**: The backend has been configured to accept requests from localhost ports 5173-5178.
+3. **Token validity**: Tokens expire after 7 days by default. Try logging out and back in.
+4. **Browser cache/cookies**: Try clearing your browser cache and cookies.
 
-- `POST /chat/`: Send messages to the AI chatbot
+### Database Issues
 
-### Speech Endpoints
+If you're having database connection problems:
 
-- `POST /synthesize/`: Convert text to speech
-- `POST /transcribe/`: Convert uploaded audio to text
-- `GET /listen-mic/`: Convert speech from microphone to text
+1. The app uses SQLite by default, which should work without configuration.
+2. For MySQL, make sure your MySQL server is running and check credentials in `.env`.
+3. You can run `setup_mysql_db.py` to initialize the MySQL database.
 
-### Authentication Endpoints
+### Groq API Issues
 
-- `POST /register`: Create a new user account
-- `POST /token`: Login and get access token
-- `GET /users/me`: Get current user details
+If AI responses aren't working:
 
-### Conversation Management
+1. Check your Groq API key in the backend `.env` file.
+2. The app now provides mock responses if your key is invalid or missing.
+3. Make sure you have internet connectivity for the API calls.
 
-- `GET /conversations/`: Get all user conversations
-- `GET /conversations/{conversation_id}/messages`: Get messages from a specific conversation
-- `PUT /conversations/{conversation_id}`: Update conversation title
-- `DELETE /conversations/{conversation_id}`: Delete a conversation
+## 🛠️ Recent Fixes
+
+- **Fixed 401 Unauthorized errors**: Improved CORS configuration and token handling
+- **Improved error handling**: Better error messages and graceful failure in API calls
+- **Database flexibility**: Added fallback to SQLite when MySQL is unavailable
+- **Better Groq API integration**: Mock responses when key is invalid, improved error handling
+- **Frontend stability**: Fixed issues with message sending and display
+- **Added start script**: A single batch file to start both frontend and backend
+
+## 🔄 Quick Start
+
+For the fastest startup experience, use the included batch file:
 
 ```
-
+cd "c:\Users\Yassine\Desktop\py projects\Chatbot AI"
+start_all.bat
 ```
+
+This will start both the frontend and backend servers and open browser windows for each.
+
+## 📋 API Documentation
+
+Once the backend is running, you can access the API documentation at:
+
+- http://localhost:8000/docs (Swagger UI)
+- http://localhost:8000/redoc (ReDoc)

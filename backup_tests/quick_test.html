@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot AI Quick Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: white;
+            background-color: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 800px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .status-card {
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            width: 100%;
+            text-align: left;
+        }
+
+        .button {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 15px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .button:hover {
+            background-color: #2563eb;
+        }
+
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        .success {
+            background-color: #064e3b;
+        }
+
+        .error {
+            background-color: #7f1d1d;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Chatbot AI Quick Diagnostic</h1>
+        <div class="status-card">
+            <h2>Server Status</h2>
+            <div class="buttons">
+                <button class="button" onclick="testBackend()">Test Backend (Port 8001)</button>
+                <button class="button" onclick="testAlternativePort()">Test Alternative Port (8000)</button>
+            </div>
+            <div id="backendStatus" class="status"></div>
+        </div>
+
+        <div class="status-card">
+            <h2>Authentication Test</h2>
+            <div class="buttons">
+                <button class="button" onclick="testLogin()">Test Login</button>
+            </div>
+            <div id="loginStatus" class="status"></div>
+        </div>
+
+        <p>
+            Use this tool to quickly diagnose connection issues with the Chatbot AI backend.
+        </p>
+
+        <p>
+            <strong>Note:</strong> For the frontend, make sure you're using port 5175
+            (or whichever port was shown in the terminal).
+        </p>
+    </div>
+
+    <script>        async function testBackend() {
+            const statusDiv = document.getElementById('backendStatus');
+            statusDiv.textContent = 'Testing connection to backend...';
+            statusDiv.className = 'status';
+
+            try {
+                const response = await fetch('http://localhost:8001/docs', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'text/html'
+                    }
+                });
+
+                if (response.ok) {
+                    statusDiv.textContent = '✅ Connection successful! Backend is running on port 8001.';
+                    statusDiv.className = 'status success';
+                } else {
+                    statusDiv.textContent = `❌ Error: ${response.status} ${response.statusText}`;
+                    statusDiv.className = 'status error';
+                }
+            } catch (error) {
+                statusDiv.textContent = `❌ Connection failed: ${error.message}`;
+                statusDiv.className = 'status error';
+            }
+        } async function testAlternativePort() {
+            const statusDiv = document.getElementById('backendStatus');
+            statusDiv.textContent = 'Testing connection to alternative port...';
+            statusDiv.className = 'status';
+
+            try {
+                const response = await fetch('http://localhost:8000/docs', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'text/html'
+                    }
+                });
+
+                if (response.ok) {
+                    statusDiv.textContent = '✅ Connection successful! Backend is running on port 8000.';
+                    statusDiv.className = 'status success';
+                } else {
+                    statusDiv.textContent = `❌ Error: ${response.status} ${response.statusText}`;
+                    statusDiv.className = 'status error';
+                }
+            } catch (error) {
+                statusDiv.textContent = `❌ Connection failed: ${error.message}`;
+                statusDiv.className = 'status error';
+            }
+        }
+
+        async function testLogin() {
+            const statusDiv = document.getElementById('loginStatus');
+            statusDiv.textContent = 'Testing login...';
+            statusDiv.className = 'status';
+
+            try {
+                const formData = new URLSearchParams();
+                formData.append('username', 'testuser');
+                formData.append('password', 'testpass');
+
+                const response = await fetch('http://localhost:8001/token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: formData
+                });
+
+                let responseText = '';
+                try {
+                    const jsonResp = await response.json();
+                    responseText = JSON.stringify(jsonResp, null, 2);
+                } catch (e) {
+                    try {
+                        responseText = await response.text();
+                    } catch (e2) {
+                        responseText = 'Unable to get response text';
+                    }
+                }
+
+                if (response.ok) {
+                    statusDiv.innerHTML = `✅ Login successful:<br><pre>${responseText}</pre>`;
+                    statusDiv.className = 'status success';
+                } else {
+                    statusDiv.innerHTML = `❌ Login failed (${response.status}):<br><pre>${responseText}</pre>`;
+                    statusDiv.className = 'status error';
+                }
+            } catch (error) {
+                statusDiv.textContent = `❌ Connection error: ${error.message}`;
+                statusDiv.className = 'status error';
+            }
+        }
+    </script>
+</body>
+
+</html>
